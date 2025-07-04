@@ -26,14 +26,14 @@ function waitForElement(getter, timeout = 10000, interval = 200) {
 }
 
 async function solveCaptcha() {
-  try {
     // 1. Find captcha container
     const container = document.querySelector('#captcha-container');
-    if (!container) return;
+    if (!container) throw new Error('Captcha container not found');
 
     // 2. Click the first button inside
     const firstButton = container.querySelector('button');
-    if (firstButton) firstButton.click();
+    if (!firstButton) throw new Error('Captcha start button not found');
+    firstButton.click();
 
     // 3. Wait for canvas to render inside container
     const canvas = await waitForElement(() => container.querySelector('canvas'));
@@ -41,10 +41,15 @@ async function solveCaptcha() {
     // 4. Convert canvas to data URL (JPEG for size)
     const dataUrl = canvas.toDataURL('image/jpeg');
 
-    // 5. Extract instruction text
-    const titleDiv = document.querySelector('div.amzn-captcha-modal-title');
-    if (!titleDiv) throw new Error('Title div not found');
-    const instructionText = titleDiv.nextElementSibling?.innerText?.trim();
+    // 5. Extract instruction text (find div that contains "Choose all ...")
+    const instructionDiv = Array.from(container.querySelectorAll('form div'))
+      .find(el => /choose all/i.test(el.textContent));
+    if (!instructionDiv) throw new Error('Instruction div not found');
+
+    const instructionText = instructionDiv.textContent
+      .replace(/\s+/g, ' ')
+      .replace(/\d+/g, '')
+      .trim();
 
     // 6. Send message to background to query OpenAI
     chrome.runtime.sendMessage({
@@ -58,16 +63,15 @@ async function solveCaptcha() {
         console.error('Error sending message', chrome.runtime.lastError);
         return;
       }
-      console.log('OpenAI response', response);
-      if (response?.matches) {
-        console.log('Matches found', response.matches);
-        //highlightMatches(container, response.matches);
-      }
-    });
 
-  } catch (err) {
-    console.error('Captcha solver error', err);
-  }
+      if(!response?.matches){
+        console.error('No matches found. OpenAI response: ', response);
+        return;
+      }
+
+      console.log('Matches found', response.matches);
+      //highlightMatches(container, response.matches);
+    });
 }
 
 // Optionally highlight images for demo / debugging
@@ -81,9 +85,9 @@ function highlightMatches(container, indexes) {
   });
 }
 
-// Run when DOM is ready
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
+// Run after full page load (all resources)
+if (document.readyState === 'complete') {
   solveCaptcha();
 } else {
-  window.addEventListener('DOMContentLoaded', solveCaptcha);
+  window.addEventListener('load', solveCaptcha);
 }

@@ -2,6 +2,13 @@
 
 This Chrome extension automatically solves the image–selection captcha that appears on the Easebuzz Merchant Dashboard.
 
+## ⚠️ Security Notice
+**This extension demonstrates that Easebuzz's current captcha implementation is fundamentally flawed.** The image-selection captcha can be trivially bypassed using vision AI models like OpenAI's GPT-4 Vision. There is no point in using such captchas as they provide zero security against automated attacks while creating unnecessary friction for legitimate users.
+
+### Message to Easebuzz Engineers
+If any Easebuzz engineer is reading this: Please remove this ineffective captcha and either make the user flow easier; without captcha barriers or use a better captcha service.
+
+
 ## How it works
 1. Runs only on `https://easebuzz.in/merchant/dashboard`.
 2. Clicks the captcha **START** button inside `#captcha-container`.

@@ -1,0 +1,29 @@
+{
+  "name": "Easebuzz Auto Captcha Solver",
+  "description": "Automatically clicks the captcha button, captures the challenge grid and uses OpenAI Vision to find matching images.",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://easebuzz.in/*",
+    "https://api.openai.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://easebuzz.in/merchant/dashboard*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Easebuzz Captcha Bypass"
+  }
+}

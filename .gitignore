@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Node / JavaScript / TypeScript
+node_modules/
+# Lock files (optional — feel free to keep if you want reproducible installs)
+# package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build / dist output
+/dist/
+/build/
+coverage/
+
+# Chrome-extension specific bundles
+*.crx
+*.pem
+*.zip
+
+# Env / secrets
+.env*
+openai_key.txt
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-*

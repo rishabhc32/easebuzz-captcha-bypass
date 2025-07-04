@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 async function getApiKey() {
   return new Promise(resolve => {
-    chrome.storage.sync.get(['openai_api_key'], (result) => {
+    chrome.storage.local.get(['openai_api_key'], (result) => {
       resolve(result.openai_api_key);
     });
   });

@@ -6,7 +6,7 @@ const status = document.getElementById('status');
 // Save key
 document.getElementById('save').addEventListener('click', () => {
   const key = keyInput.value.trim();
-  chrome.storage.sync.set({ openai_api_key: key }, () => {
+  chrome.storage.local.set({ openai_api_key: key }, () => {
     status.textContent = 'Saved!';
     setTimeout(() => {
       status.textContent = '';

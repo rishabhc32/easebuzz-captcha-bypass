@@ -13,11 +13,11 @@ This Chrome extension automatically solves the image–selection captcha that ap
 ## Installation / Usage
 1. Clone or download this folder.
 2. In Chrome, open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and select this directory.
-3. Click the extension icon → **Options** (or run `chrome.storage.sync.set({openai_api_key: 'sk-…'})` from DevTools Console) to store your OpenAI API key.
+3. Click the extension icon → **Options** (or run `chrome.storage.local.set({openai_api_key: 'sk-…'})` from DevTools Console) to store your OpenAI API key.
 4. Visit `https://easebuzz.in/merchant/dashboard` and trigger the captcha.
 
 ## Security notes
-Your OpenAI key is stored locally via `chrome.storage.sync` and is never injected into page context.
+Your OpenAI key is stored locally via `chrome.storage.local` and is never injected into page context.
 
 ## Customising
 * To auto-click the correct images, replace the `highlightMatches` function in `content.js` with code that dispatches click events instead of applying outlines.
